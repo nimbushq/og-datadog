@@ -22,6 +22,9 @@ Table of Contents
 * [Logs](#logs)
 * [Traces](#traces)
 
+**Special Topics**
+-	[Billing and Cost Management](#billing-and-cost-management)
+
 Why an Open Guide?
 ------------------
 
@@ -53,27 +56,56 @@ Scope
 
 Legend
 ------
--	❗ “Serious” gotcha (used where risks or time or resource costs are significant: critical security risks, mistakes with significant financial cost, or poor architectural choices that are fundamentally difficult to correct)
 -	💸 Cost issues, discussion, and gotchas
+-	❗ “Serious” gotcha (used where risks or time or resource costs are significant: critical security risks, mistakes with significant financial cost, or poor architectural choices that are fundamentally difficult to correct)
 
 ### Basics
 - Datadog is the all in one observability platform that markets itself as the "single plane of glass" solution for observability related use cases. They are the dominant player in the commercial observability market.
-- Datadog has [different sites](https://docs.datadoghq.com/getting_started/site/) arounds the world that store and process data locally to a particular region. You choose the site when creating an account. There is no automatic way of transferring data or configuration between datadog sites. 
+- Datadog has [different sites](https://docs.datadoghq.com/getting_started/site/) around the world that store and process data locally to a particular region. You choose the site when creating an account. There is no automatic way of transferring data or configuration between datadog sites. 
+
+## Tips
+- If you care about vendor lock in, its a good idea to use the [OpenTelemetry libraries](https://docs.datadoghq.com/opentelemetry/) to instrument your applications. This makes it possible to migrate vendors in the future or use multiple vendors at the same time
 
 ### Gotchas
-- If you want to make use of AWS Private Link (reduce egress fees from AWS to datadog by 90%), know that this is only supported in `us1` and `ap1` site 💸
 - Datadog offers FedRAMP Moderate Impact compliance in its `us1-fed` site - onboarding requires a manual account migration if you're already using a different site
+- While datadog offers support for the OpenTelemetry collector, adopting it means you forego one of Datadog's strongest qualities - seamless integration with existing services. These integrations exist for the datadog agent but is not available if you use the open telemetry collector
 
 **Datadog Services**
 
 Metrics
 ---
 
-### Infrastructure Basics
-- Datadog charges per hose 
+### Metric Basics
+- metrics is provided by Datadog's [Infrastructure](https://docs.datadoghq.com/infrastructure/) and [Metrics](https://docs.datadoghq.com/metrics/) offering
 
-### Infrastructure Tips
-- Datadog offers rich integrations into many popular services like `nginx` and `kubernetes`. Use them ahead of building your own
+### Metric Tips
+- Datadog offers rich integrations into many popular services like `nginx` and `kubernetes` which can automatically collect the right metrics and populate pre-built dashboards
 
-### Infrastructure Gotchas
-### Infrastructure Cost Optimization
+### Metric Gotchas
+- if you're using Datadog's integration to automatically collect metrics from your cloud provider, know that those metrics are [subject to delays](https://docs.datadoghq.com/integrations/guide/cloud-metric-delay/) of anywhere between 2min to 20min. Datadog provides provider specific (eg. [metric streams for AWS](https://docs.datadoghq.com/integrations/guide/aws-cloudwatch-metric-streams-with-kinesis-data-firehose/)) which can cut the delay but incur additional costs
+- because Datadog charges per host, it can make certain workloads that involve short lived host (eg. running kubernetes or utilizing spot instances) prohibitively expensive  💸 
+
+Logs
+---
+
+### Logs Basics
+- logs are provided by Datadog's [Log Management](https://docs.datadoghq.com/logs/) offering
+
+### Logs Tips
+- Datadog charges predominantly based on indexed log events. If you have logs that you're not using, use the [exclusion filters](https://docs.datadoghq.com/logs/log_configuration/indexes#exclusion-filters) to avoid paying for indexing 💸 
+
+### Logs Gotchas
+- If you use services like [Cloud Siem](https://www.datadoghq.com/pricing/?product=cloud-siem#products) that price based on per million logs scanned - note that excluding logs using an exclusion filter does not exclude it from scanning or the associated cost that come with that 💸
+
+
+Billing and Cost Management
+---------------------------
+
+### Basics
+- Datadog prices varies by each service which charge among multiple dimensions
+
+### Tips
+- You can make use of AWS Private Link to reduce egress fees from AWS by 90%. Be aware that this is only available in the `us1` and `ap1` site 💸❗ 
+
+### Gotchas
+- For metrics, logs, and traces, Datadog charges $0.10/GB for data ingress. Note that there is generally a corresponding charge from your cloud provider for egress fees. AWS for example [charges](https://aws.amazon.com/ec2/pricing/on-demand/) charges $0.09/GB of egress. This effectively doubles your data transfer fee when using Datadog 💸
