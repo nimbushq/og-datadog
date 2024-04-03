@@ -14,13 +14,13 @@ Table of Contents
 -	[Legend](#legend)
 
 **Datadog in General**
-* [Basics](#basics)
+- [Basics](#basics)
 - [Gotchas](#gotchas)
 
 **Datadog Services**
-* [Metrics](#metrics)
-* [Logs](#logs)
-* [Traces](#traces)
+- [Metrics](#metrics)
+- [Logs](#logs)
+- [Traces](#traces)
 
 **Special Topics**
 -	[Billing and Cost Management](#billing-and-cost-management)
@@ -34,7 +34,6 @@ This guide is by and for engineers who use Datadog. It aims to be a useful, livi
 
 Before using the guide, please read the [**license**](#license) and [**disclaimer**](#disclaimer).
 
-[Back to top :arrow_up:](#table-of-contents)
 
 ### Please help!
 **This is an early in-progress draft!** It’s our first attempt at assembling this information, so is far from comprehensive still, and likely to have omissions or errors.
@@ -95,7 +94,7 @@ Logs
 - Datadog charges predominantly based on indexed log events. If you have logs that you're not using, use the [exclusion filters](https://docs.datadoghq.com/logs/log_configuration/indexes#exclusion-filters) to avoid paying for indexing 💸 
 
 ### Logs Gotchas
-- If you use services like [Cloud Siem](https://www.datadoghq.com/pricing/?product=cloud-siem#products) that price based on per million logs scanned - note that excluding logs using an exclusion filter does not exclude it from scanning or the associated cost that come with that 💸
+- If you use services like [Cloud SIEM](https://www.datadoghq.com/pricing/?product=cloud-siem#products) that price based on per million logs scanned - note that excluding logs using an exclusion filter does not exclude it from scanning or the associated cost that come with that 💸
 
 
 Billing and Cost Management
