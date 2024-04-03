@@ -62,14 +62,13 @@ Legend
 - Datadog is the all in one observability platform that markets itself as the "single plane of glass" solution for observability related use cases. They are the dominant player in the commercial observability market.
 - Datadog has [different sites](https://docs.datadoghq.com/getting_started/site/) around the world that store and process data locally to a particular region. You choose the site when creating an account. There is no automatic way of transferring data or configuration between datadog sites. 
 
-## Tips
+### Tips
 - If you care about vendor lock in, its a good idea to use the [OpenTelemetry libraries](https://docs.datadoghq.com/opentelemetry/) to instrument your applications. This makes it possible to migrate vendors in the future or use multiple vendors at the same time
 
 ### Gotchas
 - Datadog offers FedRAMP Moderate Impact compliance in its `us1-fed` site - onboarding requires a manual account migration if you're already using a different site
 - While datadog offers support for the OpenTelemetry collector, adopting it means you forego one of Datadog's strongest qualities - seamless integration with existing services. These integrations exist for the datadog agent but is not available if you use the open telemetry collector
 
-**Datadog Services**
 
 Metrics
 ---
@@ -83,6 +82,16 @@ Metrics
 ### Metric Gotchas
 - if you're using Datadog's integration to automatically collect metrics from your cloud provider, know that those metrics are [subject to delays](https://docs.datadoghq.com/integrations/guide/cloud-metric-delay/) of anywhere between 2min to 20min. Datadog provides provider specific (eg. [metric streams for AWS](https://docs.datadoghq.com/integrations/guide/aws-cloudwatch-metric-streams-with-kinesis-data-firehose/)) which can cut the delay but incur additional costs
 - because Datadog charges per host, it can make certain workloads that involve short lived host (eg. running kubernetes or utilizing spot instances) prohibitively expensive  💸 
+- understand that datadog default [time aggregation](https://docs.datadoghq.com/metrics/#time-aggregation) behavior render `max` and `min` statistics inaccurate with large time windows. This is because Datadog buckets data points and averages values in those buckets.
+	> For example, when examining four hours, data points are combined into two-minute buckets. This is called a rollup. As the time interval you’ve defined for your query increases, the granularity of your data decreases.
+	- In order to see accurate statistics that are not average, you'll need to manually rollup by the desired statistic
+	```
+	# regular query
+	sum:kubernetes.cpu.usage.total{*} by {pod_name}
+
+	# query with rollup
+	sum:kubernetes.cpu.usage.total{*} by {pod_name}.rollup(max)
+	```
 
 Logs
 ---
