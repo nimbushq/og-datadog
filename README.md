@@ -131,6 +131,7 @@ Billing and Cost Management
 
 ### Tips
 - You can make use of AWS Private Link to reduce egress fees from AWS by 90%. Be aware that this is only available in the `us1` and `ap1` site 💸❗ 
+- Make use of usage commitments to get discounts from the list price. Unless you are very confident in predicting your usage, it's safer to go month to month vs annual 💸
 
 ### Gotchas
 - For metrics, logs, and traces, Datadog charges $0.10/GB for data ingress. Note that there is generally a corresponding charge from your cloud provider for egress fees. AWS for example [charges](https://aws.amazon.com/ec2/pricing/on-demand/) charges $0.09/GB of egress. This effectively doubles your data transfer fee when using Datadog 💸
