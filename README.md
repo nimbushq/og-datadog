@@ -9,9 +9,9 @@ Table of Contents
 -----------------
 
 **Purpose**
--	[Why an Open Guide?](#why-an-open-guide)
--	[Scope](#scope)
--	[Legend](#legend)
+- [Why an Open Guide?](#why-an-open-guide)
+- [Scope](#scope)
+- [Legend](#legend)
 
 **Datadog in General**
 - [Basics](#basics)
@@ -23,7 +23,7 @@ Table of Contents
 - [Traces](#traces)
 
 **Special Topics**
--	[Billing and Cost Management](#billing-and-cost-management)
+- [Billing and Cost Management](#billing-and-cost-management)
 
 Why an Open Guide?
 ------------------
@@ -106,6 +106,21 @@ Logs
 
 ### Logs Gotchas
 - If you use services like [Cloud SIEM](https://www.datadoghq.com/pricing/?product=cloud-siem#products) that price based on per million logs scanned - note that excluding logs using an exclusion filter does not exclude it from scanning or the associated cost that come with that 💸
+
+Traces
+---
+
+### Trace Basics
+- traces are provided by Datadog's [APM](https://docs.datadoghq.com/tracing/) offering
+
+### Trace Tips
+- You can sample traces using the [datadog agent](https://docs.datadoghq.com/tracing/trace_pipeline/ingestion_mechanisms/?tab=java). The default sample rate if you're using the datadog agent is 10 traces per second. The datadog agent uses head based sampling which means the sampling decision happens at the start of the trace
+- Datadog Agent provides separate sampling mechanisms for [errors and rare traces](https://docs.datadoghq.com/tracing/trace_pipeline/ingestion_mechanisms/?tab=java#error-and-rare-traces) - these mechanisms preserve errors and rare traces.  Note that errors and rare traces are sampled locally which means that there is no guarantee the full trace will be available in a distributed trace 
+- You can control trace ingestion costs by changing the default sampling rate of the datadog agent  💸
+
+### Trace Gotchas
+- like metrics, Datadog charges per host for traces. They also require that hosts with traces also have infrastructure monitoring turned on which means you pay double per host. This can make certain workloads that involve short lived host (eg. running kubernetes or utilizing spot instances) prohibitively expensive  💸 
+- Setting any library specific sampling rate will override the default sampling of the datadog agent 
 
 
 Billing and Cost Management
