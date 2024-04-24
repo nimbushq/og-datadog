@@ -85,11 +85,11 @@ Metrics
 - understand that datadog default [time aggregation](https://docs.datadoghq.com/metrics/#time-aggregation) behavior render `max` and `min` statistics inaccurate with large time windows. This is because Datadog buckets data points and averages values in those buckets.
 	> For example, when examining four hours, data points are combined into two-minute buckets. This is called a rollup. As the time interval you’ve defined for your query increases, the granularity of your data decreases.
 	- In order to see accurate statistics that are not average, you'll need to manually rollup by the desired statistic
-	```
-	# regular query
+	```yaml
+	# regular query - will hide max values due to time aggregation
 	sum:kubernetes.cpu.usage.total{*} by {pod_name}
 
-	# query with rollup
+	# query with rollup - shows true max values
 	sum:kubernetes.cpu.usage.total{*} by {pod_name}.rollup(max)
 	```
 
@@ -101,6 +101,8 @@ Logs
 
 ### Logs Tips
 - Datadog charges predominantly based on indexed log events. If you have logs that you're not using, use the [exclusion filters](https://docs.datadoghq.com/logs/log_configuration/indexes#exclusion-filters) to avoid paying for indexing 💸 
+- The default retention rate for logs is 15 days. You can change this to 1 day, 3 day, 7 day, 30 day, or greater than 30 day retention depending on your needs. The longer the retention, the more it will cost to index logs 💸
+- You can use [flex logs](https://docs.datadoghq.com/logs/log_configuration/flex_logs/) to store historical logs at $0.05/million events (this is 50x cheaper than the default on demand price). Note that this does add variable compute cost at query time  💸
 
 ### Logs Gotchas
 - If you use services like [Cloud SIEM](https://www.datadoghq.com/pricing/?product=cloud-siem#products) that price based on per million logs scanned - note that excluding logs using an exclusion filter does not exclude it from scanning or the associated cost that come with that 💸
